@@ -1,16 +1,9 @@
 <template>
-   <div class="app-container">
-      <router-view />
-      <layout-footer />
-   </div>
+   <router-view />
 </template>
 <script>
-import LayoutFooter from '@/components/LayoutFooter'
 
 export default {
-  name: 'App',
-  components: {
-    LayoutFooter
-  }
+  name: 'App'
 }
 </script>
