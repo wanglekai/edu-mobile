@@ -6,12 +6,12 @@
         <img :src="item.img">
       </van-swipe-item>
     </van-swipe>
-    <course-list class="course-list"/>
+    <course-list :fetchData="fetchData" />
   </div>
 </template>
 <script>
-import { getAllAds } from '@/services/course'
-import CourseList from './CourseList.vue'
+import { getAllAds, getQueryCourses } from '@/services/course'
+import CourseList from '@/components/CourseList'
 
 export default {
   name: 'CourseContent',
@@ -33,6 +33,9 @@ export default {
     this.loadAds()
   },
   methods: {
+    fetchData (options) {
+      return getQueryCourses(options)
+    },
     async loadAds () {
       const { data } = await getAllAds(this.spaceKeys)
       // 保存广告信息
@@ -46,27 +49,16 @@ export default {
 .my-swipe {
   width: 100%;
 }
-
 .my-swipe .van-swipe-item {
   overflow: hidden;
   display: flex;
   justify-content: center;
 }
-
 .my-swipe img {
   height: 170px;
 }
-
 .course-list {
-/* ::v-deep .van-pull-refresh__track { */
-  position: fixed;
   top: 220px;
-  left: 0;
-  right: 0;
   bottom: 60px;
-  overflow-y: auto;
 }
-/* .van-pull-refresh__track {
-  overflow-y: auto;
-} */
 </style>
