@@ -38,3 +38,11 @@ export const getSectionAndLesson = params => {
     params
   })
 }
+// 根据fileId获取阿里云对应的视频播放信息
+export const videoPlayInfo = params => {
+  return request({
+    method: 'GET',
+    url: '/front/course/media/videoPlayInfo',
+    params
+  })
+}

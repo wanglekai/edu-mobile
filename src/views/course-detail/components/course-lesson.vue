@@ -6,7 +6,8 @@
       <van-cell
         v-for="lesson of course.courseLessons"
         :key="lesson.id"
-        :title="lesson.theme">
+        :title="lesson.theme"
+        @click="handleClick(lesson)">
         <!-- 使用 right-icon 插槽来自定义右侧图标 -->
         <template #right-icon>
           <van-icon v-if="lesson.canPlay" name="play" class="play" />
@@ -25,6 +26,15 @@ export default {
       default () {
         return {}
       }
+    }
+  },
+  methods: {
+    handleClick (lesson) {
+      if (!lesson.canPlay) return
+      this.$router.push({
+        name: 'course-video',
+        params: { lessonId: lesson.id }
+      })
     }
   }
 }

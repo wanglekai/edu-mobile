@@ -30,13 +30,24 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
-    path: '/course-detail/:courseId',
+    path: '/course-detail/:lessonId',
     name: 'course-detail',
     component: () => import(/* webpackChunkName: 'course-detail' */'@/views/course-detail'),
+    meta: { requiresAuth: true },
     props: true
   },
   {
     path: '/course-detail',
+    redirect: '/'
+  },
+  {
+    path: '/course-video/:sectionId',
+    name: 'course-video',
+    component: () => import(/* webpackChunkName: 'course-video' */'@/views/course/video'),
+    props: true
+  },
+  {
+    path: '/course-video',
     redirect: '/'
   },
   {
