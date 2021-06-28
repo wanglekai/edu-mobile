@@ -30,10 +30,9 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
-    path: '/course-detail/:lessonId',
+    path: '/course-detail/:courseId',
     name: 'course-detail',
     component: () => import(/* webpackChunkName: 'course-detail' */'@/views/course-detail'),
-    meta: { requiresAuth: true },
     props: true
   },
   {
@@ -41,7 +40,7 @@ const routes = [
     redirect: '/'
   },
   {
-    path: '/course-video/:sectionId',
+    path: '/course-video/:lessonId',
     name: 'course-video',
     component: () => import(/* webpackChunkName: 'course-video' */'@/views/course/video'),
     props: true
@@ -49,6 +48,13 @@ const routes = [
   {
     path: '/course-video',
     redirect: '/'
+  },
+  {
+    path: '/pay/:courseId',
+    name: 'pay',
+    component: () => import(/* webpackChunkName: 'pay' */'@/views/pay'),
+    meta: { requiresAuth: true },
+    props: true
   },
   {
     path: '*',

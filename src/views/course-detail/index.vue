@@ -43,7 +43,7 @@
           <span class="discounts">￥{{ course.discounts }}</span>
           <span>￥{{ course.price }}</span>
         </div>
-        <van-button type="primary" >立即购买</van-button>
+        <van-button type="primary" @click="handleBuy">立即购买</van-button>
       </van-tabbar>
   </div>
 </template>
@@ -84,6 +84,15 @@ export default {
       if (data.state === 1) {
         this.courseSectionList = data.content.courseSectionList
       }
+    },
+    handleBuy () {
+      window.localStorage.setItem('current-course', JSON.stringify(this.course))
+      this.$router.push({
+        name: 'pay',
+        params: {
+          courseId: this.courseId
+        }
+      })
     }
   }
 }
