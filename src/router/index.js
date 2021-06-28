@@ -2,35 +2,47 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import store from '@/store'
 
+import course from '@/views/course'
+
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/login',
     name: 'login',
-    component: () => import(/* webpackChunkName: 'login' */'@/views/login/index')
+    component: () => import(/* webpackChunkName: 'login' */'@/views/login')
   },
   {
     path: '/',
     name: 'course',
-    component: () => import(/* webpackChunkName: 'course' */'@/views/course/index')
+    component: course
   },
   {
     path: '/learn',
     name: 'learn',
-    component: () => import(/* webpackChunkName: 'learn' */'@/views/learn/index'),
+    component: () => import(/* webpackChunkName: 'learn' */'@/views/learn'),
     meta: { requiresAuth: true }
   },
   {
     path: '/user',
     name: 'user',
-    component: () => import(/* webpackChunkName: 'user' */'@/views/user/index'),
+    component: () => import(/* webpackChunkName: 'user' */'@/views/user'),
     meta: { requiresAuth: true }
+  },
+  {
+    path: '/course-detail/:courseId',
+    name: 'course-detail',
+    component: () => import(/* webpackChunkName: 'course-detail' */'@/views/course-detail'),
+    props: true
+  },
+  {
+    path: '/course-detail',
+    redirect: '/'
   },
   {
     path: '*',
     name: 'error-page',
-    component: () => import(/* webpackChunkName: 'error-page' */'@/views/error-page/index')
+    component: () => import(/* webpackChunkName: 'error-page' */'@/views/error-page')
   }
 ]
 

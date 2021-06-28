@@ -8,7 +8,11 @@
         @load="onLoad">
         <van-cell
           v-for="item of list"
-          :key="item.id">
+          :key="item.id"
+          @click="$router.push({
+            name: 'course-detail',
+            params: { courseId: item.id }
+          })">
           <div class="course-img">
             <!-- img -->
             <img :src="item.courseImgUrl || item.image" :alt="'测试上架课程的时候都不检查一下封面的吗, ' + item.courseName" />
