@@ -10,7 +10,7 @@
         <img :src="course.courseImgUrl" alt="'当前课程封面'">
         <div class="price-info">
           <div class="course-name" v-text="course.courseName"></div>
-          <div class="discounts">￥ {{course.price}}</div>
+          <div class="discounts">￥ {{course.discounts}}</div>
         </div>
       </van-cell>
       <van-cell class="account-info">
@@ -46,11 +46,20 @@
           </van-cell-group>
         </van-radio-group>
       </div>
-      <van-button>￥{{ course.discounts }} 立即支付</van-button>
+      <van-button
+        :loading="loading"
+        @click="handlePay"
+        loading-text="请稍后...">￥{{ course.discounts }} 立即支付</van-button>
     </van-cell>
   </div>
 </template>
 <script>
+import {
+  saveOrder,
+  createOrder,
+  getPayResult
+} from '@/services/pay'
+
 export default {
   name: 'PayIndex',
   props: {
@@ -61,8 +70,10 @@ export default {
   },
   data () {
     return {
+      loading: false,
       course: {},
-      radio: '1'
+      radio: '1', // 支付方式
+      orderNo: '' // 订单编号
     }
   },
   computed: {
@@ -73,10 +84,48 @@ export default {
   },
   created () {
     this.loadCourse()
+    this.loadOrder()
   },
   methods: {
     loadCourse () {
       this.course = JSON.parse(window.localStorage.getItem('current-course') || {})
+    },
+    async loadOrder () {
+      // 创建订单
+      const { data } = await saveOrder({ goodsId: this.courseId })
+      // console.log(data)
+      if (data.state === 1) {
+        this.orderNo = data.content.orderNo
+      } else {
+        this.$toast(data.message)
+      }
+    },
+    async handlePay () {
+      this.loading = true
+      // 发起支付
+      const { data } = await createOrder({
+        goodsOrderNo: this.orderNo,
+        channel: this.radio === '1' ? 'weChat' : 'aliPay',
+        returnUrl: 'http://edufront.lagou.com/'
+      })
+      // 接收响应地址，并进行跳转
+      window.location.href = data.content.payUrl
+
+      const timer = setInterval(async () => {
+        // 发起查询支付结果请求(此处使用)
+        const { data: payResult } = await getPayResult({
+          orderNo: data.content.orderNo
+        })
+        // 如果支付结果成功，清除定时器，并提示购买成功，跳回到学习页
+        if (payResult.content && payResult.content.status === 2) {
+          clearInterval(timer)
+          this.loading = false
+          this.$toast.success('购买成功！')
+          this.$router.push({
+            name: 'learn'
+          })
+        }
+      }, 1000)
     }
   }
 }
